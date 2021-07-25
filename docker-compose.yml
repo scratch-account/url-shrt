@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "dev"
+    ports:
+      - "5433:5432"
+    restart: unless-stopped
+  app:
+    build: .
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    # command: ["./run.sh"]
+    command: ["./wait-for-it.sh", "db:5432", "--", "bash", "run.sh"]
+    # command: ["./wait-for-postgres.sh", "db", "bash", "run.sh"]
+volumes:
+  db:
