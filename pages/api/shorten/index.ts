@@ -1,8 +1,7 @@
 import prisma from '../../../lib/prisma'
 
 // POST /api/shorten
-// Required fields in body: title
-// Optional fields in body: content
+// Required fields in body: id, url
 export default async function handle(req, res) {
   const { id, url } = req.body;
   const result = await prisma.shortenedUrl.create({
