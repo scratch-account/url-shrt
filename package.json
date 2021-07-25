@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "create-db": "node scripts/createDb.mjs",
     "lint": "next lint",
     "start": "next start"
   },
