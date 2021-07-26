@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { nanoid } from 'nanoid'
 import Link from 'next/link'
 
 import prisma from '../lib/prisma'
@@ -11,8 +10,9 @@ function Form() {
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault();
     try {
-      const id = nanoid(8)
-      const body = { id, url };
+      // TODO: Add id in api route.
+      // TODO: Prevent invalid URLs (e.g., localhost, blacklisted domains)
+      const body = { url };
       const res = await fetch("/api/shorten", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

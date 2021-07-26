@@ -8,7 +8,8 @@
     "create-db": "node scripts/createDb.mjs",
     "db:postgres": "dotenv -e .env.development -- npx prisma migrate dev --name init",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest --env=jsdom"
   },
   "dependencies": {
     "@prisma/client": "^2.27.0",
@@ -24,6 +25,7 @@
     "@testing-library/react": "^12.0.0",
     "@types/node": "^16.4.1",
     "@types/react": "^17.0.14",
+    "babel-eslint": "^10.1.0",
     "babel-jest": "^27.0.6",
     "dotenv": "^10.0.0",
     "dotenv-cli": "^4.0.0",
@@ -31,6 +33,7 @@
     "eslint-config-next": "^11.0.1",
     "eslint-config-prettier": "^8.3.0",
     "jest": "^27.0.6",
+    "node-mocks-http": "^1.10.1",
     "pg": "^8.6.0",
     "pgtools": "^0.3.2",
     "prettier": "^2.3.2",
@@ -40,5 +43,14 @@
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "<rootDir>/.next/",
+      "<rootDir>/node_modules/"
+    ],
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest"
+    }
   }
 }
