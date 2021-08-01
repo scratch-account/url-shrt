@@ -1,11 +1,12 @@
 import { nanoid } from 'nanoid'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Prisma } from '@prisma/client'
-import validUrl from 'valid-url'
 
 import prisma from '../../../lib/prisma'
+import { isValidUrl } from '../../../lib/util'
 
 export type ShortenedUrl = {
+  createdAt: Date
   id: string
   url: string
 }
@@ -29,7 +30,8 @@ export default async function handle(
 ) {
   const id = nanoid(8)
   const { url } = req.body
-  if (!validUrl.isUri(url)) {
+  if (!isValidUrl(url)) {
+    console.error(`URL ${url} is invalid`)
     res
       .status(400)
       .json(
@@ -42,7 +44,7 @@ export default async function handle(
     return
   }
   try {
-    const result = await prisma.shortenedUrl.create({
+    const result: ShortenedUrl = await prisma.shortenedUrl.create({
       data: {
         id,
         url

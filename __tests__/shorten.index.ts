@@ -3,6 +3,9 @@ import nanoid from 'nanoid'
 
 import handle from '../pages/api/shorten'
 
+const DATE_TIME_REGEX =
+  /\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/
+
 describe('/api/shorten', () => {
   test('returns an id that acts as a shortened url', async () => {
     const testShortId = `testid123-${Math.random()}`
@@ -19,12 +22,13 @@ describe('/api/shorten', () => {
     expect(res._getStatusCode()).toBe(200)
     expect(nanoidSpy).toHaveBeenCalledTimes(1)
     const responseData = JSON.parse(res._getData())
-    expect(responseData).toEqual(
-      expect.objectContaining({
-        id: testShortId,
-        url: 'https://example.com'
-      })
-    )
+    expect(responseData).toMatchObject({
+      // TODO: Handle mocking date? Currently, the db generates this value, so
+      // mocking this might not be practical or useful.
+      createdAt: expect.stringMatching(DATE_TIME_REGEX),
+      id: testShortId,
+      url: 'https://example.com'
+    })
   })
   test('returns an error response for invalid request (missing url)', async () => {
     const { req, res } = createMocks({

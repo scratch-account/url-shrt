@@ -8,7 +8,11 @@ import { ShortenedUrl } from './api/shorten'
 type Props = { urls: ShortenedUrl[] }
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const shortenedUrls = await prisma.shortenedUrl.findMany()
+  const shortenedUrls = await prisma.shortenedUrl.findMany({
+    orderBy: {
+      createdAt: 'desc'
+    }
+  })
   const props: Props = { urls: shortenedUrls }
   return { props }
 }

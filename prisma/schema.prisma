@@ -11,6 +11,7 @@ generator client {
 }
 
 model ShortenedUrl {
-  id        String  @id
-  url       String
+  id         String      @id
+  createdAt  DateTime    @default(now())
+  url        String
 }
