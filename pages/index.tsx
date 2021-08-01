@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link'
 
 import Form from '../components/form'
 
@@ -11,7 +12,9 @@ const Home = () => (
 
     <main>
       <h1 className='title'>URL Shortener</h1>
-
+      <Link href='/history'>
+        <a>View history</a>
+      </Link>
       <p className='description'>
         Paste in a URL to get a nice and short URL (e.g.,
         localhost:3000/ab2ua98h).

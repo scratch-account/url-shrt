@@ -1,12 +1,20 @@
 import React, { useState } from 'react'
-import Link from 'next/link'
 
-import prisma from '../lib/prisma'
+import { ErrorResponse, ShortenedUrl } from '../pages/api/shorten'
+import ShortLink from './short-link'
 
 function Form() {
   const [url, setUrl] = useState('')
-  const [id, setId] = useState('')
-
+  const [shortenedUrl, setShortenedUrl] = useState(null)
+  const [error, setError] = useState('')
+  const onSuccess = (shortenedUrl: ShortenedUrl) => {
+    setShortenedUrl(shortenedUrl)
+    setError('')
+  }
+  const onError = (errorMessage: string) => {
+    setShortenedUrl(null)
+    setError(errorMessage)
+  }
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     try {
@@ -17,13 +25,20 @@ function Form() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
       })
-      const data = await res.json()
-      setId(data.id)
+      if (res.status >= 400) {
+        const data: ErrorResponse = await res.json()
+        onError(data.code)
+        return
+      }
+      const shortenedUrl: ShortenedUrl = await res.json()
+      onSuccess(shortenedUrl)
     } catch (error) {
       console.error(error)
+      const errorMessage = typeof error === 'string' ? error : 'Unknown error!'
+      onError(errorMessage)
     }
   }
-  const shortenedUrl = `http://localhost:3000/${id}`
+  const lastUrl = shortenedUrl?.url
   return (
     <form onSubmit={submitData}>
       <label htmlFor='url'>URL</label>
@@ -36,13 +51,18 @@ function Form() {
         type='url'
         value={url}
       />
-      <button type='submit'>Shorten it!</button>
-      {id && (
+      <button disabled={lastUrl === url} type='submit'>
+        Shorten it!
+      </button>
+      {shortenedUrl && (
         <div>
-          Here's your url!{' '}
-          <Link href={shortenedUrl}>
-            <a target='_blank'>{shortenedUrl}</a>
-          </Link>
+          <div>Here's your shortened url for {shortenedUrl.url}!</div>
+          <ShortLink id={shortenedUrl.id} />
+        </div>
+      )}
+      {error && (
+        <div>
+          The following error encountered while shortening your url: {error}
         </div>
       )}
     </form>
