@@ -10,7 +10,6 @@ function Form() {
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault()
     try {
-      // TODO: Add id in api route.
       // TODO: Prevent invalid URLs (e.g., localhost, blacklisted domains)
       const body = { url }
       const res = await fetch('/api/shorten', {

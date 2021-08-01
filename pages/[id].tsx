@@ -3,29 +3,32 @@ import { GetServerSideProps } from 'next'
 import redirect from 'nextjs-redirect'
 
 import prisma from '../lib/prisma'
+import Custom404 from './404'
 
 type Props = { url: string }
 
+const INVALID_ID_PROPS = { url: null }
+
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const idParam = params?.id
+  if (!idParam || Array.isArray(idParam)) {
+    return { props: INVALID_ID_PROPS }
+  }
   const shortenedUrl = await prisma.shortenedUrl.findUnique({
     where: {
-      id: params?.id
+      id: idParam
     }
   })
-  const props: Props = shortenedUrl || { url: null }
+  const props: Props = shortenedUrl || INVALID_ID_PROPS
   return { props }
 }
 
 const RedirectPage: React.FC<Props> = (props) => {
   if (!props.url) {
-    return (
-      <div>
-        It looks like you've followed a bad link or maybe there is a typo in
-        your URL (Note: URLs are case sensitive).
-      </div>
-    )
+    return <Custom404 />
   }
   const Redirect = redirect(props.url)
+  // TODO: Determine if we would rather not show a redirect page.
   return (
     <Redirect>
       <div>Redirecting to {props.url}</div>
