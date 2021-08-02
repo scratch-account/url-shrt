@@ -2,7 +2,7 @@ import { nanoid } from 'nanoid'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Prisma } from '@prisma/client'
 
-import prisma from '../../../lib/prisma'
+import DBClient from '../../../lib/prisma'
 import { isValidUrl } from '../../../lib/util'
 
 export type ShortenedUrl = {
@@ -22,13 +22,15 @@ export type ErrorResponse = {
   details: string
 }
 
+export const SHORT_ID_LENGTH = 8
+
 // POST /api/shorten
 // Required fields in body: url
 export default async function handle(
   req: NextApiRequest,
   res: NextApiResponse<ShortenedUrl | ErrorResponse>
 ) {
-  const id = nanoid(8)
+  const id = nanoid(SHORT_ID_LENGTH)
   const { url } = req.body
   if (!isValidUrl(url)) {
     console.error(`URL ${url} is invalid`)
@@ -46,6 +48,7 @@ export default async function handle(
   // TODO: Use url-exist package to verify that URL exists before creating short
   // link
   try {
+    const { prisma } = DBClient.getInstance()
     const result: ShortenedUrl = await prisma.shortenedUrl.create({
       data: {
         id,

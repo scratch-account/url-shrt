@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 // FIXME: Error occurs when running this file as typescript (.ts)
 
 import { render, screen } from '@testing-library/react'

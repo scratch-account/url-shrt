@@ -1,14 +1,19 @@
 import { PrismaClient } from '@prisma/client'
 
-let prisma: PrismaClient
-
-if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient()
-} else {
-  if (!global.prisma) {
-    global.prisma = new PrismaClient()
+// Derived from https://github.com/prisma/prisma/issues/1983#issuecomment-741528078
+class DBClient {
+  public prisma: PrismaClient
+  private static instance: DBClient
+  private constructor() {
+    this.prisma = new PrismaClient()
   }
-  prisma = global.prisma
+
+  public static getInstance = () => {
+    if (!DBClient.instance) {
+      DBClient.instance = new DBClient()
+    }
+    return DBClient.instance
+  }
 }
 
-export default prisma
+export default DBClient

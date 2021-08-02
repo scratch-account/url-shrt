@@ -7,9 +7,10 @@
     "build": "next build",
     "db:dev": "dotenv -e .env.development -- npx prisma migrate dev",
     "db:docker": "dotenv -e .env.docker -- npx prisma migrate dev",
+    "db:test": "dotenv -e .env.test -- npx prisma migrate dev",
     "lint": "next lint",
     "start": "next start",
-    "test": "jest --env=jsdom",
+    "test": "dotenv -e .env.test jest",
     "prepare": "husky install"
   },
   "dependencies": {

@@ -2,7 +2,7 @@ import React from 'react'
 import { GetServerSideProps } from 'next'
 import redirect from 'nextjs-redirect'
 
-import prisma from '../lib/prisma'
+import DBClient from '../lib/prisma'
 import Custom404 from './404'
 
 type Props = { url: string }
@@ -14,6 +14,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   if (!idParam || Array.isArray(idParam)) {
     return { props: INVALID_ID_PROPS }
   }
+  const { prisma } = DBClient.getInstance()
   const shortenedUrl = await prisma.shortenedUrl.findUnique({
     where: {
       id: idParam

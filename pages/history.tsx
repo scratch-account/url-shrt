@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { ArrowBack } from '@styled-icons/material'
 
 import ShortLink from '../components/short-link'
-import prisma from '../lib/prisma'
+import DBClient from '../lib/prisma'
 import { ShortenedUrl } from './api/shorten'
 
 type Props = { urls: ShortenedUrl[] }
@@ -12,6 +12,7 @@ type Props = { urls: ShortenedUrl[] }
 const LIMIT = 10
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { prisma } = DBClient.getInstance()
   const shortenedUrls = await prisma.shortenedUrl.findMany({
     orderBy: {
       createdAt: 'desc'
@@ -24,6 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   return { props }
 }
 
+// TODO: Implement auth and only permit users to see history for themselves.
 const History: React.FC<Props> = (props) => {
   return (
     <>
