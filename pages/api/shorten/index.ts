@@ -43,6 +43,8 @@ export default async function handle(
     res.end()
     return
   }
+  // TODO: Use url-exist package to verify that URL exists before creating short
+  // link
   try {
     const result: ShortenedUrl = await prisma.shortenedUrl.create({
       data: {

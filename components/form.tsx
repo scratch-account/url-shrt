@@ -51,7 +51,6 @@ function Form() {
     }
   }
   const lastUrl = shortenedUrl?.url
-  const inputIsInvalid = !isValidUrl(inputUrl)
   return (
     <div className='form-container'>
       <form onSubmit={submitData}>
@@ -96,8 +95,6 @@ function Form() {
         }
 
         form {
-          // display: flex;
-          // justify-content: space-evenly;
           margin-bottom: 20px;
         }
 
@@ -115,11 +112,16 @@ function Form() {
           align-items: center;
         }
 
+        .error.message {
+          color: #a51212;
+        }
+
         .message .label {
           display: flex;
         }
 
         .original-url {
+          font-weight: 500;
           margin-left: 5px;
           max-width: 30vw;
           overflow: hidden;
@@ -138,20 +140,8 @@ function Form() {
       `}</style>
 
       <style jsx global>{`
-        html,
-        body {
-          padding: 0;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
-            sans-serif;
-        }
         .result > * {
           margin: 0 10px;
-        }
-
-        * {
-          box-sizing: border-box;
         }
       `}</style>
     </div>

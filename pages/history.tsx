@@ -9,6 +9,8 @@ import { ShortenedUrl } from './api/shorten'
 
 type Props = { urls: ShortenedUrl[] }
 
+const LIMIT = 10
+
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const shortenedUrls = await prisma.shortenedUrl.findMany({
     orderBy: {
@@ -16,7 +18,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
     },
     // TODO: Fully implement pagination:
     // https://www.prisma.io/docs/concepts/components/prisma-client/pagination
-    take: 10
+    take: LIMIT
   })
   const props: Props = { urls: shortenedUrls }
   return { props }
@@ -30,13 +32,25 @@ const History: React.FC<Props> = (props) => {
           <ArrowBack width={15} height={15} /> Back
         </a>
       </Link>
-      <ul>
-        {props.urls?.map(({ createdAt, id, url }) => (
-          <li key={id}>
-            <ShortLink createdAt={createdAt} id={id} url={url} />
-          </li>
-        ))}
-      </ul>
+      {props.urls.length > 0 ? (
+        <ul>
+          {props.urls.map(({ createdAt, id, url }) => (
+            <li key={id}>
+              <ShortLink createdAt={createdAt} id={id} url={url} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <div>No URLs have been shortened yet!</div>
+      )}
+      <div>Showing the {LIMIT} most recent URLs</div>
+      <style jsx>{`
+        ul {
+          list-style: none;
+          margin-left: 0;
+          padding-left: 0;
+        }
+      `}</style>
     </>
   )
 }

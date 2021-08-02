@@ -19,6 +19,11 @@ function CopyButton({ text }) {
       >
         {isCopied ? 'Copied!' : 'Copy to clipboard'}
       </button>
+      <style jsx>{`
+        button {
+          min-width: 120px;
+        }
+      `}</style>
     </div>
   )
 }

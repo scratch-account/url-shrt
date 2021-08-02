@@ -6,11 +6,15 @@ import styled, { css } from 'styled-components'
 import { getShortUrlForId } from '../lib/util'
 
 const Container = styled.div`
+  margin-bottom: 5px;
+`
+const Metadata = styled.div`
   display: flex;
 `
 const muted = css`
   color: gray;
   font-weight: 200;
+  font-size: small;
 `
 const LongUrl = styled.div`
   ${muted}
@@ -22,7 +26,6 @@ const LongUrl = styled.div`
 `
 
 const CreatedText = styled.div`
-  font-size: small;
   ${muted}
 `
 
@@ -35,10 +38,14 @@ function ShortLink({ createdAt = null, id, url = null }) {
           {shortenedUrl} <OpenInNew width={15} height={15} />
         </a>
       </Link>
-      {url ? <LongUrl title={url}>{url}</LongUrl> : null}
-      {createdAt ? (
-        <CreatedText>{formatDistanceToNow(createdAt)} ago</CreatedText>
-      ) : null}
+      <Metadata>
+        {createdAt ? (
+          <CreatedText title={createdAt}>
+            {formatDistanceToNow(createdAt)} ago
+          </CreatedText>
+        ) : null}
+        {url ? <LongUrl title={url}>Original: {url}</LongUrl> : null}
+      </Metadata>
     </Container>
   )
 }

@@ -1,3 +1,4 @@
+import isPublicDomain from 'is-public-domain'
 import isValidDomain from 'is-valid-domain'
 
 const PERMITTED_PROTOCOLS = ['http:', 'https:']
@@ -9,8 +10,8 @@ export function isValidUrl(urlString?: string): boolean {
     const url = new URL(urlString)
     // Do not permit ports
     if (url.port) return false
-    // Ensure domain name is valid
-    if (!isValidDomain(url.host)) return false
+    // Ensure domain name is valid (and public!)
+    if (!isValidDomain(url.host) || !isPublicDomain(url.host)) return false
     // Only allow permitted protocols
     if (PERMITTED_PROTOCOLS.indexOf(url.protocol) === -1) return false
   } catch (e) {

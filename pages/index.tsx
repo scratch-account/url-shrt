@@ -16,8 +16,17 @@ const Home = () => (
       Paste in a URL to get a nice and short URL (e.g.,{' '}
       {getShortUrlForId('ab2ua98h')}).
     </p>
-
     <Form />
+    <style jsx>{`
+      .description {
+        text-align: center;
+      }
+
+      .description {
+        line-height: 1.5;
+        font-size: 1.5rem;
+      }
+    `}</style>
   </>
 )
 
