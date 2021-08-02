@@ -17,6 +17,11 @@ describe('/lib/util isValidUrl', () => {
     ['http://localhost', false],
     ['http://localhost:8080', false],
     ['http://foo', false],
+    // TLD does not exist
+    ['https://intranet.local', false],
+    ['https://www.www', false],
+    // Check special characters
+    ['https://*.com', false],
     // Do not permit ports (even 80)
     ['https://google.com:80', false],
     ['https://google.com:9000', false],
