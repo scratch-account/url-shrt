@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
+# This is the script run by docker-compose.yml
 echo "-> starting prisma migrations to postgres...\n"
-# ./wait-for-postgres.sh localhost:5432 -- echo "db online\n"
 npx prisma generate
 yarn db:docker
 sleep 5
