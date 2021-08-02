@@ -1,15 +1,21 @@
 import React, { useState } from 'react'
 
+import CopyButton from './copy-button'
+import { isValidUrl, getShortUrlForId } from '../lib/util'
 import { ErrorResponse, ShortenedUrl } from '../pages/api/shorten'
 import ShortLink from './short-link'
 
+const URL_FORMAT = 'http(s)://{domain}'
+
 function Form() {
-  const [url, setUrl] = useState('')
+  // inputUrl default value must be empty string to avoid upsetting React when
+  // setting <input /> value prop
+  const [inputUrl, setInputUrl] = useState('')
   const [shortenedUrl, setShortenedUrl] = useState(null)
-  const [error, setError] = useState('')
+  const [error, setError] = useState(null)
   const onSuccess = (shortenedUrl: ShortenedUrl) => {
     setShortenedUrl(shortenedUrl)
-    setError('')
+    setError(null)
   }
   const onError = (errorMessage: string) => {
     setShortenedUrl(null)
@@ -17,9 +23,13 @@ function Form() {
   }
   const submitData = async (e: React.SyntheticEvent) => {
     e.preventDefault()
+    if (!isValidUrl(inputUrl)) {
+      setError(`Note: URLs must match the format: ${URL_FORMAT}`)
+      return
+    }
     try {
       // TODO: Prevent invalid URLs (e.g., localhost, blacklisted domains)
-      const body = { url }
+      const body = { url: inputUrl }
       const res = await fetch('/api/shorten', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -35,37 +45,116 @@ function Form() {
     } catch (error) {
       console.error(error)
       const errorMessage = typeof error === 'string' ? error : 'Unknown error!'
-      onError(errorMessage)
+      onError(
+        `The following error encountered while shortening your url: ${errorMessage}`
+      )
     }
   }
   const lastUrl = shortenedUrl?.url
+  const inputIsInvalid = !isValidUrl(inputUrl)
   return (
-    <form onSubmit={submitData}>
-      <label htmlFor='url'>URL</label>
-      <input
-        id='url'
-        name='url'
-        onChange={(e) => setUrl(e.target.value)}
-        pattern='https?://.+'
-        required
-        type='url'
-        value={url}
-      />
-      <button disabled={lastUrl === url} type='submit'>
-        Shorten it!
-      </button>
+    <div className='form-container'>
+      <form onSubmit={submitData}>
+        <label htmlFor='url'>Enter your URL</label>
+        <input
+          id='url'
+          name='url'
+          onChange={(e) => {
+            if (shortenedUrl) setShortenedUrl(null)
+            setInputUrl(e.target.value)
+          }}
+          pattern='https?://.+'
+          placeholder='E.g. https://example.com'
+          required
+          type='url'
+          value={inputUrl}
+        />
+        <button disabled={lastUrl === inputUrl} type='submit'>
+          Shorten it!
+        </button>
+      </form>
       {shortenedUrl && (
-        <div>
-          <div>Here's your shortened url for {shortenedUrl.url}!</div>
-          <ShortLink id={shortenedUrl.id} />
+        <div className='success message'>
+          <div className='label'>
+            Here's your shortened url for
+            <div className='original-url' title={shortenedUrl.url}>
+              {shortenedUrl.url}
+            </div>
+          </div>
+          <div className='result'>
+            <ShortLink id={shortenedUrl.id} />
+            <CopyButton text={getShortUrlForId(shortenedUrl.id)} />
+          </div>
         </div>
       )}
-      {error && (
-        <div>
-          The following error encountered while shortening your url: {error}
-        </div>
-      )}
-    </form>
+      {error && <div className='error message'>{error}</div>}
+      <style jsx>{`
+        .form-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        form {
+          // display: flex;
+          // justify-content: space-evenly;
+          margin-bottom: 20px;
+        }
+
+        form > input {
+          width: 20vw;
+        }
+
+        form > * {
+          margin: 0 10px;
+        }
+
+        .message {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .message .label {
+          display: flex;
+        }
+
+        .original-url {
+          margin-left: 5px;
+          max-width: 30vw;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .message > * {
+          margin: 10px 0px;
+        }
+
+        .result {
+          display: flex;
+          justify-content: space-evenly;
+        }
+      `}</style>
+
+      <style jsx global>{`
+        html,
+        body {
+          padding: 0;
+          margin: 0;
+          font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+            Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue,
+            sans-serif;
+        }
+        .result > * {
+          margin: 0 10px;
+        }
+
+        * {
+          box-sizing: border-box;
+        }
+      `}</style>
+    </div>
   )
 }
 

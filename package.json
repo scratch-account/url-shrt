@@ -14,12 +14,16 @@
   },
   "dependencies": {
     "@prisma/client": "^2.28.0",
+    "@styled-icons/material": "^10.34.0",
+    "copy-to-clipboard": "^3.3.1",
+    "date-fns": "^2.23.0",
     "is-valid-domain": "^0.1.2",
     "nanoid": "^3.1.23",
     "next": "11.0.1",
     "nextjs-redirect": "^5.0.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "styled-components": "^5.3.0",
     "superjson": "^1.7.4"
   },
   "devDependencies": {

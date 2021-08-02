@@ -19,7 +19,14 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
       id: idParam
     }
   })
-  const props: Props = shortenedUrl || INVALID_ID_PROPS
+  // FIXME: Next.js doesn't like to deserialize types like DateTime. superjson has
+  // a plugin to resolve this (see https://github.com/blitz-js/superjson#using-with-nextjs)
+  // which has been added to this repo, but does not appear to work with this page
+  // for some reason (there are no issues with history.tsx).
+  // This hack allows us to handle parsing the createdAt field correctly.
+  const string = JSON.stringify(shortenedUrl)
+  const parsed = JSON.parse(string)
+  const props: Props = parsed || INVALID_ID_PROPS
   return { props }
 }
 

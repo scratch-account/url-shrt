@@ -3,6 +3,7 @@ import isValidDomain from 'is-valid-domain'
 const PERMITTED_PROTOCOLS = ['http:', 'https:']
 
 export function isValidUrl(urlString?: string): boolean {
+  if (!urlString) return false
   // The methods invoked here return undefined if the URL is invalid
   try {
     const url = new URL(urlString)
@@ -18,4 +19,8 @@ export function isValidUrl(urlString?: string): boolean {
     return false
   }
   return true
+}
+
+export function getShortUrlForId(id: string) {
+  return `http://localhost:3000/${id}`
 }
