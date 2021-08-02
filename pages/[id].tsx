@@ -36,10 +36,30 @@ const RedirectPage: React.FC<Props> = (props) => {
     return <Custom404 />
   }
   const Redirect = redirect(props.url)
-  // TODO: Determine if we would rather not show a redirect page.
+  // TODO: Determine if we would rather not show a redirect page. It might be
+  // nice though in case something goes wrong (!), in which case the user can
+  // click the link we show.
   return (
     <Redirect>
-      <div>Redirecting to {props.url}</div>
+      <div className='container'>
+        Redirecting to{' '}
+        <div className='original-url'>
+          <a title={props.url} href={props.url}>
+            {props.url}
+          </a>
+        </div>
+      </div>
+      <style jsx>{`
+        .container {
+          margin-top: 50px;
+          text-align: center;
+        }
+        .original-url {
+          max-width: 50vw;
+          text-align: justify;
+          overflow-wrap: anywhere;
+        }
+      `}</style>
     </Redirect>
   )
 }

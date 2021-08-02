@@ -49,7 +49,7 @@ describe('/api/shorten', () => {
   })
   test('returns an error response for invalid request (bad url)', async () => {
     const testShortId = `testid123-${Math.random()}`
-    const nanoidSpy = jest.spyOn(nanoid, 'nanoid').mockReturnValue(testShortId)
+    jest.spyOn(nanoid, 'nanoid').mockReturnValue(testShortId)
     const { req, res } = createMocks({
       method: 'POST',
       body: {

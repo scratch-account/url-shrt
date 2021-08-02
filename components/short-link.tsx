@@ -34,7 +34,7 @@ function ShortLink({ createdAt = null, id, url = null }) {
   return (
     <Container>
       <Link href={shortenedUrl}>
-        <a target='_blank'>
+        <a title='Try out short link in a new tab' target='_blank'>
           {shortenedUrl} <OpenInNew width={15} height={15} />
         </a>
       </Link>

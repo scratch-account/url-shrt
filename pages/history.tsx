@@ -1,8 +1,7 @@
 import React from 'react'
 import { GetServerSideProps } from 'next'
-import Link from 'next/link'
-import { ArrowBack } from '@styled-icons/material'
 
+import HomeLink from '../components/home-link'
 import ShortLink from '../components/short-link'
 import DBClient from '../lib/prisma'
 import { ShortenedUrl } from './api/shorten'
@@ -29,11 +28,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 const History: React.FC<Props> = (props) => {
   return (
     <>
-      <Link href='/'>
-        <a>
-          <ArrowBack width={15} height={15} /> Back
-        </a>
-      </Link>
+      <HomeLink />
       {props.urls.length > 0 ? (
         <ul>
           {props.urls.map(({ createdAt, id, url }) => (
