@@ -1,4 +1,4 @@
-import { formatDistanceToNow } from 'date-fns'
+import { format, formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
 import { OpenInNew } from '@styled-icons/material'
 import styled, { css } from 'styled-components'
@@ -40,7 +40,7 @@ function ShortLink({ createdAt = null, id, url = null }) {
       </Link>
       <Metadata>
         {createdAt ? (
-          <CreatedText title={createdAt}>
+          <CreatedText title={format(createdAt, 'MMM d yyyy, h:mm:ss a')}>
             {formatDistanceToNow(createdAt)} ago
           </CreatedText>
         ) : null}
