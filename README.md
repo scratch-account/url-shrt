@@ -36,6 +36,8 @@ I'm relatively new to Docker, but the following steps should work pretty well (I
 Make sure you have [Docker](https://www.docker.com/products/docker-desktop) installed and running locally.
 
 ```bash
+git clone https://github.com/scratch-account/url-shrt
+cd url-shrt
 docker-compose up --build
 # View app at http://localhost:3000
 ```
