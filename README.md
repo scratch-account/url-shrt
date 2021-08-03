@@ -20,8 +20,6 @@ git clone https://github.com/scratch-account/url-shrt
 cd url-shrt
 # Install dependencies
 yarn
-# Tell prisma to initialize and migrate db to latest schema
-yarn db:dev
 # Start up app
 yarn dev
 # View app at http://localhost:3000
