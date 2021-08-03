@@ -6,8 +6,10 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
     environment:
+      # Note: These must match the values provided in .env.docker (used by Prisma)
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'password'
+      POSTGRES_DB: 'url-shrt-docker'
     ports:
       - '5433:5432'
     restart: unless-stopped

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:docker": "dotenv -e .env.docker yarn dev",
     "build": "next build",
     "db:dev": "dotenv -e .env.development -- npx prisma migrate dev",
     "db:docker": "dotenv -e .env.docker -- npx prisma migrate dev",

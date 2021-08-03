@@ -4,4 +4,4 @@ echo "-> starting prisma migrations to postgres...\n"
 npx prisma generate
 yarn db:docker
 sleep 5
-yarn dev
+yarn dev:docker
